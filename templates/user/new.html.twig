@@ -11,25 +11,25 @@
             <h5 class="mb-0">User Form</h5>
         </div>
         <div class="card-body p-4">
-            <form>
+            {{ form_start(form) }}
                 <table class="table table-bordered">
                     <tbody>
                         <tr>
                             <th class="bg-light text-primary">Nom</th>
                             <td>
-                                <input type="text" name="nom" class="form-control" placeholder="Enter user's name">
+                                {{ form_widget(form.nom, { 'attr': { 'class': 'form-control', 'placeholder': "Enter user's name" } }) }}
                             </td>
                         </tr>
                         <tr>
                             <th class="bg-light text-primary">Email</th>
                             <td>
-                                <input type="email" name="email" class="form-control" placeholder="Enter user's email">
+                                {{ form_widget(form.EMAIL, { 'attr': { 'class': 'form-control', 'placeholder': "Enter user's email" } }) }}
                             </td>
                         </tr>
                         <tr>
                             <th class="bg-light text-primary">Mot de passe</th>
                             <td>
-                                <input type="password" name="motdepasse" class="form-control" placeholder="Enter user's password">
+                                {{ form_widget(form.motdepasse, { 'attr': { 'class': 'form-control', 'placeholder': "Enter user's password" } }) }}
                             </td>
                         </tr>
                     </tbody>
@@ -37,7 +37,7 @@
                 <div class="text-end mt-3">
                     <button type="submit" class="btn btn-success px-4">Save</button>
                 </div>
-            </form>
+            {{ form_end(form) }}
         </div>
     </div>
 
