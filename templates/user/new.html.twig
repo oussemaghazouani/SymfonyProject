@@ -32,6 +32,13 @@
                                 {{ form_widget(form.motdepasse, { 'attr': { 'class': 'form-control', 'placeholder': "Enter user's password" } }) }}
                             </td>
                         </tr>
+                        <tr>
+                            <th class="bg-light text-primary">Role</th>
+                            <td>
+                                {{ form_widget(form.role, { 'attr': { 'class': 'form-control' } }) }}
+                                {{ form_errors(form.role) }}
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
                 <div class="text-end mt-3">

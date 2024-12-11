@@ -1,0 +1,129 @@
+{% block title %}Sign Up{% endblock %}
+
+{% block stylesheets %}
+  <style>
+        /* General Page Styles */
+        .container {
+            max-width: 500px;  /* Limit width of the form */
+            margin: 0 auto;    /* Center form horizontally */
+            padding: 40px;     /* Add padding around the container */
+            background-color: #ffffff; /* White background for clean look */
+            border-radius: 8px; /* Rounded corners for the container */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Soft shadow around container */
+        }
+
+        h2 {
+            font-size: 2rem;
+            color: #333;
+            font-weight: bold;
+            margin-bottom: 30px;  /* Add space below the title */
+            text-align: center;
+        }
+
+        .form-label {
+            font-size: 1rem;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .form-control {
+            border-radius: 5px; /* Rounded form fields */
+            border: 1px solid #ccc; /* Soft border */
+            padding: 12px; /* Spacing inside input */
+            font-size: 1rem;
+            width: 100%;
+            margin-bottom: 15px;
+            background-color: #f9f9f9; /* Light input background */
+        }
+
+        .form-control:focus {
+            border-color: #007bff; /* Blue focus border */
+            background-color: #fff; /* White background on focus */
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Focus shadow */
+        }
+
+        .form-check-label {
+            font-size: 0.9rem;
+            color: #555;
+        }
+
+        /* Terms and Conditions Link */
+        .terms-link {
+            color: #007bff; /* Blue color for the link */
+            text-decoration: none;
+        }
+
+        .terms-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Submit Button Styles */
+        .btn-signup {
+            background-color: #007bff; /* Blue background */
+            border: none;
+            color: white;
+            padding: 12px 30px;
+            font-size: 1rem;
+            border-radius: 5px;
+            width: 100%;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-signup:hover {
+            background-color: #0056b3; /* Darker blue on hover */
+        }
+
+        /* Error message styling */
+        .form-error {
+            color: red;
+            font-size: 0.875rem;
+            margin-top: 5px;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 767px) {
+            .container {
+                padding: 20px; /* Reduce padding on smaller screens */
+            }
+        }
+    </style>
+     
+{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <h2 class="mb-4 text-center text-uppercase text-secondary">Sign Up</h2>
+
+    <div class="card shadow-lg border-0">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">Create a New Account</h5>
+        </div>
+        <div class="card-body p-4">
+            {{ form_start(form) }}
+                <div class="mb-3">
+                    <label for="nom" class="form-label">Full Name</label>
+                    {{ form_widget(form.nom, { 'attr': { 'class': 'form-control', 'placeholder': "Enter your full name" } }) }}
+                    {{ form_errors(form.nom) }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="EMAIL" class="form-label">Email Address</label>
+                    {{ form_widget(form.EMAIL, { 'attr': { 'class': 'form-control', 'placeholder': "Enter your email address" } }) }}
+                    {{ form_errors(form.EMAIL) }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="motdepasse" class="form-label">Password</label>
+                    {{ form_widget(form.motdepasse, { 'attr': { 'class': 'form-control', 'placeholder': "Enter your password" } }) }}
+                    {{ form_errors(form.motdepasse) }}
+                </div>
+
+                <div class="text-center mt-3">
+                    <button type="submit" class="btn" btn-success px-4">Sign Up</button>
+                </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+{% endblock %}

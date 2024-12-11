@@ -1,0 +1,28 @@
+{# templates/user/login.html.twig #}
+
+{% block title %}Login{% endblock %}
+
+{% block body %}
+    <h1>Login</h1>
+
+    {% if error %}
+        <div class="alert alert-danger">
+            <p>{{ error.messageKey|trans(error.messageData, 'security') }}</p>
+        </div>
+    {% endif %}
+
+    <form method="post">
+        {{ form_start(form) }}
+
+        {# Utilisez 'email' en minuscules ici, comme défini dans le formulaire #}
+        {{ form_row(form.email) }}  <!-- 'email' en minuscules -->
+
+        {{ form_row(form.motdepasse) }}
+
+        <button type="submit">Se connecter</button>
+
+        {{ form_end(form) }}
+    </form>
+
+    <a href="{{ path('app_signup') }}">Créer un compte</a>
+{% endblock %}
