@@ -1,0 +1,206 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Competitions List</title>
+
+    <style>
+        /* General styling */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+
+        h1 {
+            color: #d32f2f;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        /* Table styling */
+        table {
+            width: 90%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            background-color: white;
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #d32f2f;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #ffdada;
+        }
+
+        a.btn {
+            text-decoration: none;
+            padding: 8px 12px;
+            color: white;
+            background-color: #d32f2f;
+            border-radius: 5px;
+        }
+
+        /* Stats container styling */
+        .stats-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 20px auto;
+            gap: 20px;
+            padding: 20px;
+            background-color: white;
+            width: 90%;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+        }
+
+        .stats-box {
+            flex: 1 1 300px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .stats-box h3 {
+            color: #d32f2f;
+            margin-bottom: 15px;
+        }
+
+        .stats-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .stats-item {
+            margin: 10px 0;
+            font-size: 16px;
+        }
+
+        .stats-value {
+            font-weight: bold;
+            color: #d32f2f;
+        }
+         .btn-search {
+        background-color: #ffeb3b;
+        color: #333;
+    }
+
+    .btn-search:hover {
+        background-color: #fbc02d;
+        transform: translateY(-2px);
+    }
+    </style>
+</head>
+<body>
+    <h1>Competitions List</h1>
+     <!-- Search Form -->
+        <form action="{{ path('app_competitions_search2') }}" method="get" class="form-inline my-3 justify-content-center">
+            <input type="text" name="q" placeholder="Search competitions..." class="form-control mr-2" value="{{ app.request.get('q') }}">
+            <button type="submit" class="btn btn-search">Search</button>
+        </form>
+         <a href="{{ path('app_competitions_martial_art') }}" class="btn btn-primary">Martial Art</a>
+         <a href="{{ path('app_competitions_non_martial_art') }}" class="btn btn-primary"> Non Martial Art</a>
+          <a href="{{ path('app_competitions_trier88') }}" class="btn btn-trier mr-2">Sort by Date</a>
+
+   <table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Date</th>
+            <th>Type Competition</th>
+            <th>Submit Action</th>
+            <th>Cancel Action</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for competition in competitions %}
+            <tr>
+                <td>{{ competition.id }}</td>
+                <td>{{ competition.name }}</td>
+                <td>{{ competition.type }}</td>
+                <td>{{ competition.dateC|date('Y-m-d') }}</td>
+                <td>{{ competition.typeCompetition.name }}</td>
+
+                <td>
+                    <a href="{{ path('app_competitions_compete', {'id': competition.id}) }}" class="btn btn-compete">Compete</a>
+                </td>
+
+                <td>
+                    <a href="{{ path('app_competitions_annuler', {'id': competition.id}) }}" class="btn btn-annuler">Cancel Competition</a>
+                </td>
+
+                <td>
+                    <a href="{{ path('app_competitions_show2', {'id': competition.id}) }}" class="btn btn-show">Show</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="8">No competitions found.</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<a href="{{ path('app_competitions_index3') }}" class="btn btn-trier mr-2">participation</a>
+
+
+    <div class="stats-container">
+        <!-- Percentages by type -->
+        <div class="stats-box">
+            <h3>Competition Percentages by Type</h3>
+            <ul class="stats-list">
+                <li class="stats-item">Bodybuilding: <span class="stats-value">{{ percentages.bodybuilding }}%</span></li>
+                <li class="stats-item">Kickboxing: <span class="stats-value">{{ percentages.kickboxing }}%</span></li>
+                <li class="stats-item">Boxing: <span class="stats-value">{{ percentages.boxing }}%</span></li>
+            </ul>
+        </div>
+
+        <!-- Martial vs Non-Martial Arts -->
+        <div class="stats-box">
+            <h3>Martial vs Non-Martial Arts</h3>
+            <ul class="stats-list">
+                <li class="stats-item">Martial Arts: <span class="stats-value">{{ percentagesmornm['martial art']|number_format(2) }}%</span></li>
+                <li class="stats-item">Non-Martial Arts: <span class="stats-value">{{ percentagesmornm['non martial art']|number_format(2) }}%</span></li>
+            </ul>
+        </div>
+
+        <!-- Competitions by Month -->
+        <div class="stats-box">
+            <h3>Competitions by Month</h3>
+            <ul class="stats-list">
+                {% for month, count in month['monthcounts'] %}
+                    <li class="stats-item">{{ month }}: <span class="stats-value">{{ count }}</span></li>
+                {% else %}
+                    <li class="stats-item">No data available for any month.</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+   
+</body>
+</html>
+{% endblock %}

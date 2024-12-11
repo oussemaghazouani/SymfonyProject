@@ -1,0 +1,30 @@
+{% extends 'basedash.html.twig' %}
+    {% block body %}
+    {% block title %}New Competitions{% endblock %}
+
+
+    <h1>Create New Competitions</h1>
+
+    {{ include('competitions/_form.html.twig') }}
+
+    <a class="btn btn-secondary" href="{{ path('app_competitions_index') }}">Back to list</a>
+
+
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        h1 {
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+        .btn {
+            margin: 5px;
+            padding: 10px 15px;
+        }
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+    </style>
+   
+{% endblock %}

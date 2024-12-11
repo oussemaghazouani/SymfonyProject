@@ -1,0 +1,15 @@
+{
+  "dependencies": {
+    "fullcalendar": "^6.1.15"
+  },
+  "scripts": {
+    "dev": "encore dev",
+    "dev-server": "encore dev-server",
+    "build": "encore production"
+  },
+  "devDependencies": {
+    "@symfony/webpack-encore": "^5.0.1",
+    "webpack": "^5.97.1",
+    "webpack-cli": "^5.1.4"
+  }
+}

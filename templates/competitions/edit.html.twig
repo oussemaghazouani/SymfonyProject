@@ -1,0 +1,77 @@
+{% extends 'basedash.html.twig' %}
+{% block body %}
+
+{% block title %}Edit Competitions{% endblock %}
+    <div class="container d-flex justify-content-center align-items-center min-vh-100">
+        <div class="text-center">
+            <h1>Edit Competitions</h1>
+            <!-- Include the form -->
+            {{ include('competitions/_form.html.twig', {'button_label': 'Update'}) }}
+
+            <!-- Back to list button -->
+            <a class="btn btn-secondary back-btn" href="{{ path('app_competitions_index') }}">
+                <i class="fas fa-arrow-left"></i> Back to list
+            </a>
+        </div>
+    </div>
+
+
+
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Template Stylesheet -->
+    <link href="css/style.css" rel="stylesheet">
+
+    <style>
+        h1 {
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+
+        /* General button styling */
+        .btn {
+            margin: 5px;
+            padding: 8px 12px; /* Smaller padding for a smaller button */
+        }
+
+        /* Update button styling */
+        .btn-primary {
+            background-color: #ff5722; /* Use a vibrant color like orange */
+            border-color: #ff5722;
+            color: #fff;
+        }
+        .btn-primary:hover {
+            background-color: #e64a19; /* Darker shade on hover */
+            border-color: #e64a19;
+        }
+
+        /* Back to list button styling */
+        .back-btn {
+            background-color: #6c757d; /* Gray color matching Bootstrap secondary */
+            border-color: #6c757d;
+            color: #fff;
+        }
+        .back-btn:hover {
+            background-color: #5a6268; /* Darker gray on hover */
+            border-color: #5a6268;
+        }
+
+        /* Centering the form and content */
+        .container {
+            height: 100vh;
+        }
+        .text-center {
+            max-width: 600px; /* Limit max width */
+            width: 100%;
+        }
+    </style>
+{% endblock %}
