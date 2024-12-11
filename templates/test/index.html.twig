@@ -1,6 +1,45 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}<span> aloulo </span> {% endblock %}
 
+{% block table %}
+    <h1>Produit </h1>
 
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nom</th>
+                <th>Prix(dt)</th>
+                <th>EstDisponible</th>
+                <th>Description</th>
+                <th>type_produit</th>
+                <th>actions</th>
+            
 
+            </tr>
+        </thead>
+        <tbody>
+        {% for produit in produits %}
+            <tr>
+                <td>{{ produit.id }}</td>
+                <td>{{ produit.nom }}</td>
+                <td>{{ produit.prix }}</td>
+                <td>{{ produit.EstDisponible ? 'oui' : 'non' }}</td>
+                <td>{{ produit.Description }}</td>
+                <td>{{ produit.getTypeP.getNom }}</td>
+
+            
+                
+                
+
+               
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">Produit non disponible</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

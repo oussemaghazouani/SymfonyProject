@@ -1,0 +1,74 @@
+{% extends 'base.html.twig' %}
+
+{% block table %}
+    <div class="container">
+        <h1>Mon Panier</h1>
+
+        {% if products is empty %}
+            <p>Votre panier est vide.</p>
+        {% else %}
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>Nom</th>
+                        <th>Prix</th>
+                        <th>Quantité</th>
+                        <th>Total</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% set total = 0 %}
+                    {% for item in products %}
+                        <tr id="product-{{ item.product.id }}">
+                            <td><img src="{{ asset('uploads/images/' ~ item.product.image) }}" alt="{{ item.product.nom }}" width="50" height="50"></td>
+                            <td>{{ item.product.nom }}</td>
+                            <td class="price">{{ item.product.prix }} DT</td>
+                            <td>
+                                <!-- Quantity input (can be updated later via JavaScript) -->
+                                <input type="number" value="{{ item.quantity }}" min="1" class="form-control w-25 quantity" data-price="{{ item.product.prix }}" data-id="{{ item.product.id }}" />
+                            </td>
+                            <td class="total">{{ item.product.prix * item.quantity }} DT</td>
+                            <td>
+                                <!-- Remove item from cart (optional) -->
+                                <a href="{{ path('cart_remove', { id: item.product.id }) }}" class="btn btn-danger btn-sm">Supprimer</a>
+                            </td>
+                        </tr>
+                        {% set total = total + (item.product.prix * item.quantity) %}
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <div class="text-right">
+                <h3>Total: <span id="total-price">{{ total }} DT</span></h3>
+            </div>
+        {% endif %}
+    </div>
+
+    <script>
+        // JavaScript to update total when quantity changes
+        document.querySelectorAll('.quantity').forEach(function (input) {
+            input.addEventListener('input', function () {
+                var quantity = parseInt(this.value) || 1; // Default to 1 if invalid input
+                var price = parseInt(this.getAttribute('data-price'));
+                var productId = this.getAttribute('data-id');
+
+                // Calculate the total for this item
+                var totalCell = document.querySelector('#product-' + productId + ' .total');
+                totalCell.textContent = (price * quantity) + ' DT';
+
+                // Update the total cart price
+                updateTotal();
+            });
+        });
+
+        function updateTotal() {
+            var total = 0;
+            document.querySelectorAll('.total').forEach(function (cell) {
+                total += parseInt(cell.textContent.replace(' DT', '') || 0);
+            });
+            document.getElementById('total-price').textContent = total + ' DT';
+        }
+    </script>
+{% endblock %}
