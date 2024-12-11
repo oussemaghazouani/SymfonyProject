@@ -1,0 +1,15 @@
+
+{% extends 'basedash.html.twig' %}
+
+{% block title %}New Materiels{% endblock %}
+
+{% block body %}
+    
+  <h1  style="font-size: 3rem; color: red; font-weight: bold; text-align: center; margin-bottom: 30px; text-decoration: underline;">Create New Materiels</h1>
+
+    {{ include('materiels/_form.html.twig') }}
+
+
+<a href="{{ path('app_materiels_index') }}" class="btn btn-primary">Back to list</a>
+
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends 'basedash.html.twig' %}
+
+{% block title %}TypeMateriels index{% endblock %}
+
+{% block body %}
+    <h1>TypeMateriels index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for type_materiel in type_materiels %}
+            <tr>
+                <td>{{ type_materiel.id }}</td>
+                <td>{{ type_materiel.name }}</td>
+                <td>
+                    <a href="{{ path('app_type_materiels_show', {'id': type_materiel.id}) }}">show</a>
+                    <a href="{{ path('app_type_materiels_edit', {'id': type_materiel.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_type_materiels_new') }}">Create new</a>
+{% endblock %}

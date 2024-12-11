@@ -1,0 +1,41 @@
+{% extends 'basedash.html.twig' %}
+
+{% block title %}Materiels index{% endblock %}  
+
+{% block body %}
+    <h1  style="font-size: 3rem; color: red; font-weight: bold; text-align: center; margin-bottom: 30px; text-decoration: underline;">Liste des Matériels</h1>
+
+    <table style="border-collapse: separate; border-spacing: 15px; width: 100%;">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nom</th>
+                <th>Actions</th>
+                
+               
+            </tr>
+        </thead>
+        <tbody>
+            {% for materiel in materiels %}
+                <tr>
+                    <td>{{ materiel.id }}</td>
+                    <td>{{ materiel.name }}</td>
+                    <td>
+                        <a href="{{ path('app_materiels_show', {'id': materiel.id}) }}" class="btn btn-primary">Afficher</a>
+                        <a href="{{ path('app_materiels_edit', {'id': materiel.id}) }}" class="btn btn-secondary" style="margin-left: 10px;">Modifier</a>
+                    </td>
+                 
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="3">Aucun matériel trouvé.</td>
+                </tr>
+            {% endfor %}
+
+        </tbody>
+    </table>
+     <!-- Bouton Créer -->
+    <div style="margin-bottom: 15px;">
+        <a href="{{ path('app_materiels_new') }}" class="btn btn-primary">Créer un nouveau matériel</a>
+    </div>
+{% endblock %}

@@ -1,0 +1,77 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Statistiques des matériels{% endblock %}
+
+{% block body %}
+    <style>
+        /* Assurer que le corps de la page occupe toute la hauteur de l'écran */
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Le bloc main prendra toute la hauteur restante */
+        main {
+            flex-grow: 1;
+        }
+
+        /* Style pour le tableau pour ajouter de l'espace autour et ajuster la hauteur */
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+
+        table th, table td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        table th {
+            background-color: #f2f2f2;  /* Couleur de fond du header */
+            color: black;  /* Texte noir pour les titres */
+        }
+
+        table tr:nth-child(even) {
+            background-color: #f9f9f9;  /* Fond des lignes paires */
+        }
+
+        table tr:nth-child(odd) {
+            background-color: #f1f1f1;  /* Fond des lignes impaires */
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;  /* Bordures claires pour la table */
+        }
+
+        /* Optionnel : ajuster la hauteur de la table si nécessaire */
+        table {
+            height: 400px; /* Ajuste la hauteur du tableau */
+            overflow-y: auto; /* Si la table dépasse, une barre de défilement sera affichée */
+        }
+    </style>
+
+    <h1 style="font-size: 3rem; color: red; font-weight: bold; text-align: center; margin-bottom: 30px; text-decoration: underline;">Statistiques des matériels par type</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Type de matériel</th>
+                <th>Nombre de matériels</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for type in typesMateriels %}
+                <tr>
+                    <td style="color: black;">{{ type.name }}</td>  <!-- Texte noir pour le nom du type -->
+                    <td style="color: black;">{{ counts[type.id] }}</td>  <!-- Texte noir pour le nombre -->
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="2" style="text-align: center; color: black;">Aucun type de matériel trouvé.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

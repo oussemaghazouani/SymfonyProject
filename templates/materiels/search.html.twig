@@ -1,0 +1,39 @@
+{% extends 'basedash.html.twig' %}
+
+{% block title %}Recherche de Matériels{% endblock %}
+
+{% block body %}
+    <h1  style="font-size: 3rem; color: red; font-weight: bold; text-align: center; margin-bottom: 30px; text-decoration: underline;">Résultats de la recherche</h1>
+
+    {% if query %}
+        <p>Résultats pour la recherche : "<strong>{{ query }}</strong>"</p>
+    {% endif %}
+
+    {% if materiels is not empty %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Nom</th>
+                    <th>Type</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for materiel in materiels %}
+                    <tr>
+                        <td>{{ materiel.id }}</td>
+                        <td>{{ materiel.name }}</td>
+                        <td>{{ materiel.type ? materiel.type.name : 'N/A' }}</td>
+                        <td>
+                            <a href="{{ path('app_materiels_show', {'id': materiel.id}) }}" class="btn btn-primary">Afficher</a>
+                            <a href="{{ path('app_materiels_edit', {'id': materiel.id}) }}" class="btn btn-secondary">Modifier</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Aucun matériel trouvé pour cette recherche.</p>
+    {% endif %}
+{% endblock %}

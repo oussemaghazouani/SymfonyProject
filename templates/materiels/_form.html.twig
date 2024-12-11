@@ -1,0 +1,13 @@
+{{ form_start(form) }}
+ 
+ <div class="form-group">
+        {{ form_label(form.name, 'Nom du matériel') }}
+        {{ form_widget(form.name, {'attr': {'class': 'custom-input-class'}}) }} 
+    </div>
+    <div class="form-group">
+        {{ form_label(form.type, 'Sélectionner le type de matériel') }}
+        {{ form_widget(form.type, {'attr': {'class': 'custom-select-class'}}) }} 
+    </div>
+    <button class="btn btn-primary">{{ button_label|default('Save') }}</button>
+    
+{{ form_end(form) }}
