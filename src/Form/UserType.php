@@ -26,7 +26,9 @@ class UserType extends AbstractType
         $builder
             ->add('EMAIL')
             ->add('motdepasse', PasswordType::class)
-            ->add('recaptcha', Recaptcha3Type::class);
+            ->add('recaptcha', Recaptcha3Type::class, [
+                'mapped' => false,  // Not mapped to any entity field
+            ]);
 
 
         if ($isAdmin) {

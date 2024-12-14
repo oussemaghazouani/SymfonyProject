@@ -1,13 +1,20 @@
 {% block body %}
-    <h1>Signup</h1>
+<h1>Signup</h1>
 
-    {# Display the site key for debugging purposes #}
-    <p>reCAPTCHA Site Key: {{ site_key }}</p>
+{# Optionally display the site key for debugging purposes #}
+<p>reCAPTCHA Site Key: {{ site_key }}</p>
 
-    {{ form_start(form) }}
-       
-        <div class="g-recaptcha" data-sitekey="{{ site_key }}"></div>
-        {{ form_row(form._token) }}
-        <button type="submit">Sign up</button>
-    {{ form_end(form) }}
+{{ form_start(form) }}
+ 
+    {# Add a field to render the reCAPTCHA widget for v2 #}
+    <div class="g-recaptcha" data-sitekey="{{ site_key }}"></div>
+
+    {{ form_row(form._token) }}
+     
+    <button type="submit">Sign up</button>
+
+{{ form_end(form) }}
+
+{# Load the reCAPTCHA API JS to render the reCAPTCHA v2 widget #}
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
 {% endblock %}

@@ -21,7 +21,7 @@ final class UserController extends AbstractController
     public function __construct(ReCaptchaService $recaptchaService, ParameterBagInterface $parameterBag)
 {
     $this->recaptchaService = $recaptchaService;
-    $this->googleRecaptchaSiteKey = $parameterBag->get('google_recaptcha_site_key');  // Correct parameter name
+    $this->googleRecaptchaSiteKey = "6LcSn5sqAAAAAAXOuiGVl_xR_nhfOR7c4bRnlBUi";  // Correct parameter name
 }
 
 
@@ -31,35 +31,41 @@ final class UserController extends AbstractController
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
-
+    
         if ($form->isSubmitted() && $form->isValid()) {
-            // Get the reCAPTCHA token from the form submission
-            $recaptchaToken = $request->request->get('recaptcha_token');
-
-            // Verify the reCAPTCHA token with Google's API
-            $isValid = $this->recaptchaService->verify($recaptchaToken, $request->getClientIp());
-
-            if (!$isValid) {
-                $this->addFlash('error', 'reCAPTCHA verification failed.');
+            $recaptchaResponse = $request->request->get('g-recaptcha-response');
+    
+            if (!$recaptchaResponse) {
+                $this->addFlash('error', 'Please complete the reCAPTCHA.');
                 return $this->render('user/signup.html.twig', [
                     'form' => $form->createView(),
-                    'site_key' => $this->googleRecaptchaSiteKey, // Pass the site key
+                    'site_key' => $this->googleRecaptchaSiteKey,
                 ]);
             }
-
-            // Continue with the user registration process
+    
+            $isValid = $this->recaptchaService->verify($recaptchaResponse, $request->getClientIp());
+    
+            if ($isValid) {
+                $this->addFlash('error', 'reCAPTCHA verification aasba failed.');
+                return $this->render('user/signup.html.twig', [
+                    'form' => $form->createView(),
+                    'site_key' => $this->googleRecaptchaSiteKey, 
+                ]);
+            }
+            $user->setRole("ROLE_CLIENT");
             $entityManager->persist($user);
             $entityManager->flush();
-
+            
             $this->addFlash('success', 'Your account has been created successfully!');
             return $this->redirectToRoute('app_login');
         }
-
+        
         return $this->render('user/signup.html.twig', [
             'form' => $form->createView(),
-            'site_key' => $this->googleRecaptchaSiteKey, // Pass the site key
+            'site_key' => $this->googleRecaptchaSiteKey, 
         ]);
     }
+    
 
     #[Route(name: 'app_user_index', methods: ['GET'])]
     public function index(UserRepository $userRepository): Response
@@ -130,5 +136,12 @@ final class UserController extends AbstractController
         }
 
         return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
+    }
+    #[Route('/login', name: 'app_login', methods: ['GET'])]
+
+    public function login(): Response
+    {
+        // Render your login page (you could also handle authentication here)
+        return $this->render('security/login.html.twig');
     }
 }

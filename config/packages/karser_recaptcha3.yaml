@@ -1,0 +1,5 @@
+karser_recaptcha3:
+    site_key: '%env(GOOGLE_RECAPTCHA_SITE_KEY)%'
+    secret_key: '%env(GOOGLE_RECAPTCHA_SECRET_KEY)%'
+    enabled: true
+    score_threshold: 0.5  # You can set a score threshold, e.g., 0.5 for medium-level verification

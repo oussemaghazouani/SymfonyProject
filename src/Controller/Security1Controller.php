@@ -2,31 +2,67 @@
 
 namespace App\Controller;
 
+use App\Service\ReCaptchaService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Symfony\Component\Routing\Annotation\Route;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Form\FormInterface;
 
 class Security1Controller extends AbstractController
 {
-    #[Route(path: '/login', name: 'app_login')]
-    public function login(AuthenticationUtils $authenticationUtils): Response
+    private ReCaptchaService $recaptchaService;
+
+    // Inject services via the constructor
+    public function __construct(ReCaptchaService $recaptchaService)
     {
-        // if ($this->getUser()) {
-        //     return $this->redirectToRoute('target_path');
-        // }
-
-        // get the login error if there is one
-        $error = $authenticationUtils->getLastAuthenticationError();
-        // last username entered by the user
-        $lastUsername = $authenticationUtils->getLastUsername();
-
-        return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
+        $this->recaptchaService = $recaptchaService;
     }
 
-    #[Route(path: '/logout', name: 'app_logout')]
-    public function logout(): void
+    /**
+     * @Route("/signup", name="app_signup")
+     */
+    public function signup(Request $request, EntityManagerInterface $entityManager): Response
     {
-        throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
+        $user = new User();
+        $form = $this->createForm(UserType::class, $user);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Get the reCAPTCHA response from the form submission
+            $recaptchaResponse = $request->request->get('g-recaptcha-response');
+
+            if (!$recaptchaResponse) {
+                $this->addFlash('error', 'Please complete the reCAPTCHA.');
+                return $this->render('user/signup.html.twig', [
+                    'form' => $form->createView(),
+                    'site_key' => $this->googleRecaptchaSiteKey,
+                ]);
+            }
+
+            // Verify the reCAPTCHA response with Google's API
+            $isValid = $this->recaptchaService->verify($recaptchaResponse, $request->getClientIp());
+
+            if (!$isValid) {
+                $this->addFlash('error', 'reCAPTCHA verification failed.');
+                return $this->render('user/signup.html.twig', [
+                    'form' => $form->createView(),
+                    'site_key' => $this->googleRecaptchaSiteKey, // Pass the site key
+                ]);
+            }
+
+            // Continue with the user registration process
+            $entityManager->persist($user);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Your account has been created successfully!');
+            return $this->redirectToRoute('app_login');
+        }
+
+        return $this->render('user/signup.html.twig', [
+            'form' => $form->createView(),
+            'site_key' => $this->googleRecaptchaSiteKey,
+        ]);
     }
 }
