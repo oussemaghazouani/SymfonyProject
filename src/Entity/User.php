@@ -106,9 +106,8 @@ class User implements UserInterface
         // In most cases, there is no sensitive data to clear
         // but you can add your own logic if needed
     }
-    public function __construct(string $email, string $password)
+    public function __construct()
     {
-        $this->email = $email;
-        $this->Motdepasse = $Motdepasse;
+       
     }
 }

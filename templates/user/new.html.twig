@@ -11,6 +11,15 @@
             <h5 class="mb-0">User Form</h5>
         </div>
         <div class="card-body p-4">
+        <script src="https://www.google.com/recaptcha/api.js?render={{ app.env('GOOGLE_RECAPTCHA_SITE_KEY') }}"></script>
+<script>
+    grecaptcha.ready(function() {
+        grecaptcha.execute('{{ app.env('GOOGLE_RECAPTCHA_SITE_KEY') }}', {action: 'homepage'}).then(function(token) {
+            // Add the token to a hidden input field
+            document.getElementById('recaptchaToken').value = token;
+        });
+    });
+</script>
             {{ form_start(form) }}
                 <table class="table table-bordered">
                     <tbody>
@@ -38,6 +47,8 @@
                                 {{ form_widget(form.role, { 'attr': { 'class': 'form-control' } }) }}
                                 {{ form_errors(form.role) }}
                             </td>
+                            <input type="hidden" name="recaptcha_token" id="recaptchaToken">
+                            <button type="submit">Submit</button>
                         </tr>
                     </tbody>
                 </table>
