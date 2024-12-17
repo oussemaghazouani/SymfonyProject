@@ -16,7 +16,6 @@ class AuthorRepository extends ServiceEntityRepository
         parent::__construct($registry, Author::class);
     }
 
-<<<<<<< HEAD
 //    /**
 //     * @return Author[] Returns an array of Author objects
 //     */
@@ -41,7 +40,6 @@ class AuthorRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
-=======
     //    /**
     //     * @return Author[] Returns an array of Author objects
     //     */
@@ -66,5 +64,4 @@ class AuthorRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
->>>>>>> competition
 }
