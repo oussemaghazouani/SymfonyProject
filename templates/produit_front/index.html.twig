@@ -1,7 +1,4 @@
-
 {% extends 'base.html.twig' %}
-
-
 
 {% block type %}
     <li class="menu-has-children">
@@ -16,7 +13,7 @@
     </li>
 {% endblock %}
 
-{% block table %}
+{% block body %}
 <section class="top-course-area section-gap" id="produits">
     <div class="container">
         <div class="row d-flex justify-content-center">
@@ -64,25 +61,22 @@
         <!-- Product listing section -->
         <div class="row">
             {% for produit in produits %}
-    <div class="col-lg-4 col-md-6">
-        <div class="single-course">
-            <div class="thumb">
-                <img src="{{ asset('uploads/images/' ~ produit.image) }}" alt="Image de {{ produit.nom }}" width="100">
-            </div>
-            <span class="course-status">
-                {{ produit.EstDisponible ? 'Disponible' : 'Indisponible' }}
-            </span>
-            <a href="{{ path('app_produit_front_show', { id: produit.id }) }}">
-                <h4>{{ produit.nom }} <span>{{ produit.prix }} DT</span></h4>
-            </a>
-            <p>{{ produit.Description }}</p>
-            <p><strong>Type :</strong> {{ produit.TypeP.nom }}</p>
-            <a href="{{ path('cart_add', {id: produit.id}) }}" class="btn btn-primary mt-3">Ajouter au Panier</a>
-
-
-
-        </div>
-    </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="single-course">
+                        <div class="thumb">
+                            <img src="{{ asset('uploads/images/' ~ produit.image) }}" alt="Image de {{ produit.nom }}" width="100">
+                        </div>
+                        <span class="course-status">
+                            {{ produit.EstDisponible ? 'Disponible' : 'Indisponible' }}
+                        </span>
+                        <a href="{{ path('app_produit_front_show', { id: produit.id }) }}">
+                            <h4>{{ produit.nom }} <span>{{ produit.prix }} DT</span></h4>
+                        </a>
+                        <p>{{ produit.Description }}</p>
+                        <p><strong>Type :</strong> {{ produit.TypeP.nom }}</p>
+                        <a href="{{ path('cart_add', {id: produit.id}) }}" class="btn btn-primary mt-3">Ajouter au Panier</a>
+                    </div>
+                </div>
             {% else %}
                 <div class="col-12 text-center">
                     <p class="alert alert-warning">Aucun produit disponible pour le moment.</p>
