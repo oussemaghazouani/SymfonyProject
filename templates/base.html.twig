@@ -60,7 +60,8 @@
 				      <nav id="nav-menu-container">
 				        <ul class="nav-menu">
 				          <li class="menu-active"><a href="#home">Home</a></li>
-				          <li><a href="#offer">we offer</a></li>
+				          <li><a href="{{ path('app_competitions_index2') }}">list de compétitions</a></li>
+
 				          <li><a href="#top-course">Top Course</a></li>				          
 				          <li><a href="#schedule">Schedule</a></li>
 				          <li><a href="#trainer">Trainer</a></li>
@@ -95,7 +96,7 @@
 				</div>
 			</section>
 			<!-- End banner Area -->	
-
+{% block body %}
 			<!-- Start offer Area -->
 			<section class="offer-area section-gap" id="offer">
 				<div class="container">	
@@ -139,6 +140,7 @@
 				</div>	
 			</section>
 			<!-- End offer Area -->
+			{% endblock %}
 			
 			<!-- Start convert Area -->
 			<section class="convert-area" id="convert">
@@ -651,58 +653,5 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 			<script src="{{asset('js/main.js')}}"></script>	
 		</body>
 	</html>
-	php bin/console make:entity Admin
-	php bin/console make:migration
-	php bin/console doctrine:migrations:migrate
-	php bin/console app:create-admin email@example.com password
-	php bin/console make:form AdminType Admin
-	<?php
-
-namespace App\Controller;
-
-use App\Entity\Admin;
-use App\Form\AdminType;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-
-#[Route('/admin')]
-class AdminController extends AbstractController
-{
-    #[Route('/add', name: 'admin_add')]
-    public function add(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
-    {
-        $admin = new Admin();
-        $form = $this->createForm(AdminType::class, $admin);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            // Hash the password before saving
-            $hashedPassword = $passwordHasher->hashPassword($admin, $admin->getPassword());
-            $admin->setPassword($hashedPassword);
-
-            $entityManager->persist($admin);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('admin_list'); // Assumes there's a route for listing admins
-        }
-
-        return $this->render('admin/add.html.twig', [
-            'form' => $form->createView(),
-        ]);
-    }
-}
-
-
-
-
-
-
-
-
-
 
 

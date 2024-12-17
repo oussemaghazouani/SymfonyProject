@@ -13,29 +13,8 @@ class Author
     #[ORM\Column]
     private ?int $id = null;
 
-<<<<<<< HEAD
-=======
-    #[ORM\Column(length: 50)]
-    private ?string $username = null;
-
->>>>>>> competition
     public function getId(): ?int
     {
         return $this->id;
     }
-<<<<<<< HEAD
-=======
-
-    public function getUsername(): ?string
-    {
-        return $this->username;
-    }
-
-    public function setUsername(string $username): static
-    {
-        $this->username = $username;
-
-        return $this;
-    }
->>>>>>> competition
 }
