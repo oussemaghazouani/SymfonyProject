@@ -14,20 +14,18 @@ security:
             security: false
 
         main:
-            # Form login with the custom authenticator
             form_login:
                 login_path: app_login
                 check_path: app_login
-                username_parameter: EMAIL
-                password_parameter: motdepasse
+                username_parameter: email
+                password_parameter: password
                 enable_csrf: true
             logout:
                 path: /logout
                 target: /login
             custom_authenticator: App\Security\UserAuthenticator
-            # Define the entry point to use the custom authenticator for anonymous access
-            entry_point: App\Security\UserAuthenticator  # Explicitly set the entry point for this firewall
+            entry_point: App\Security\UserAuthenticator
 
     access_control:
         - { path: ^/admin, roles: ROLE_ADMIN }
-        - { path: ^/profile, roles: ROLE_USER }
+        - { path: ^/profile, roles: ROLE_CLIENT }

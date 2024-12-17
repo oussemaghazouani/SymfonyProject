@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
+
 #[Route('/user')]
 final class UserController extends AbstractController
 {
@@ -46,7 +47,7 @@ final class UserController extends AbstractController
             $isValid = $this->recaptchaService->verify($recaptchaResponse, $request->getClientIp());
     
             if ($isValid) {
-                $this->addFlash('error', 'reCAPTCHA verification aasba failed.');
+                $this->addFlash('error', 'reCAPTCHA verification failed.');
                 return $this->render('user/signup.html.twig', [
                     'form' => $form->createView(),
                     'site_key' => $this->googleRecaptchaSiteKey, 
@@ -99,7 +100,7 @@ final class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_user_show', methods: ['GET'])]
+    #[Route('/{email}', name: 'app_user_show', methods: ['GET'])]
     public function show(User $user): Response
     {
         return $this->render('user/show.html.twig', [
@@ -137,11 +138,12 @@ final class UserController extends AbstractController
 
         return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
     }
-    #[Route('/login', name: 'app_login', methods: ['GET'])]
-
-    public function login(): Response
+    
+    #[Route('/auth', name: 'app_login')]
+    public function login(Request $request, User $user, EntityManagerInterface $entityManager): Response
     {
-        // Render your login page (you could also handle authentication here)
-        return $this->render('security/login.html.twig');
+        return $this->render('user/login.html.twig');
     }
+
+
 }

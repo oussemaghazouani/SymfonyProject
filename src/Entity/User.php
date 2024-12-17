@@ -5,8 +5,6 @@ namespace App\Entity;
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 class User implements UserInterface
@@ -19,8 +17,9 @@ class User implements UserInterface
     #[ORM\Column(type: 'string')]
     private ?string $nom = null;
 
-    #[ORM\Column(type: 'string', length: 180, unique: true)]
-    private ?string $EMAIL = null;
+    // Renaming the EMAIL field to email for better convention
+    #[ORM\Column(type: 'string', length: 180, unique: true)] 
+    private ?string $email = null;
 
     #[ORM\Column(type: 'string')]
     private ?string $motdepasse = null;
@@ -46,14 +45,14 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getEMAIL(): ?string
+    public function getEmail(): ?string  // Renaming the getter to match the new field name
     {
-        return $this->EMAIL;
+        return $this->email;
     }
 
-    public function setEMAIL(string $EMAIL): static
+    public function setEmail(string $email): static  // Renaming the setter to match the new field name
     {
-        $this->EMAIL = $EMAIL;
+        $this->email = $email;
         return $this;
     }
 
@@ -95,7 +94,7 @@ class User implements UserInterface
      */
     public function getUserIdentifier(): string
     {
-        return (string) $this->EMAIL;  // or any other unique identifier (e.g., $this->nom)
+        return (string) $this->email;  // Use the renamed field
     }
 
     /**
@@ -106,8 +105,9 @@ class User implements UserInterface
         // In most cases, there is no sensitive data to clear
         // but you can add your own logic if needed
     }
+    
     public function __construct()
     {
-       
+        // Constructor logic (if any)
     }
 }

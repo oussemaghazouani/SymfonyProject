@@ -5,6 +5,10 @@ services:
             $httpClient: '@http_client'  # Automatically injected HttpClient service
             $secretKey: '%env(GOOGLE_RECAPTCHA_SECRET_KEY)%'  # Secret key from environment
 
+    App\Controller\AuthYsfController:
+        autowire: true  # Enable autowiring
+        autoconfigure: true
+
     # Register UserController with explicit dependencies on ReCaptchaService
     App\Controller\UserController:
         arguments:
@@ -21,6 +25,16 @@ services:
     App\Security\UserAuthenticator:
         arguments:
             $urlGenerator: '@router'
+
+    # Register repository services
+    App\Repository\:
+        resource: '../src/Repository'
+        tags: ['doctrine.repository_service']
+
+    # Register the custom Argument Resolver for user lookup by email
+    App\ArgumentResolver\UserByEmailValueResolver:
+        arguments:
+            $entityManager: '@doctrine.orm.entity_manager'
 
     # Enable autowiring and autoconfiguration globally
     _defaults:

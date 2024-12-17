@@ -65,4 +65,11 @@ class Security1Controller extends AbstractController
             'site_key' => $this->googleRecaptchaSiteKey,
         ]);
     }
+
+    #[Route('/client', name: 'client')]
+    public function client(Request $request): Response
+    {
+        
+        return $this->render('user/login.html.twig');
+    }
 }
