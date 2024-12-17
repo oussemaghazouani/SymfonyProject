@@ -1,3 +1,7 @@
+
+
+
+
 services:
 
     # this creates a service per class whose id is the fully-qualified class name
@@ -53,6 +57,8 @@ parameters:
     # Define your reCAPTCHA keys
     google_recaptcha_site_key: '%env(GOOGLE_RECAPTCHA_SITE_KEY)%'
     google_recaptcha_secret_key: '%env(GOOGLE_RECAPTCHA_SECRET_KEY)%'
+    images_directory: '%kernel.project_dir%/public/uploads/images'
+
 # This file is the entry point to configure your own services.
 # Files in the packages/ subdirectory configure your dependencies.
 

@@ -1,0 +1,49 @@
+{% extends 'basedash.html.twig' %}
+
+{% block table %}
+    <h1>Produit </h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nom</th>
+                <th>Prix (dt)</th>
+                <th>Est Disponible</th>
+                <th>Description</th>
+                <th>Type Produit</th>
+                <th>Image</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for produit in produits %}
+            <tr>
+                <td>{{ produit.id }}</td>
+                <td>{{ produit.nom }}</td>
+                <td>{{ produit.prix }}</td>
+                <td>{{ produit.EstDisponible ? 'oui' : 'non' }}</td>
+                <td>{{ produit.Description }}</td>
+                <td>{{ produit.getTypeP.nom }}</td>
+                <td>
+                    {% if produit.image %}
+                        <img src="{{ asset('uploads/images/' ~ produit.image) }}" alt="Image de {{ produit.nom }}" width="100">
+                    {% else %}
+                        <img src="{{ asset('uploads/images/default.jpg') }}" alt="Image par défaut" width="100">
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="{{ path('app_produit_show', {'id': produit.id}) }}">Afficher</a>
+                    <a href="{{ path('app_produit_edit', {'id': produit.id}) }}">Modifier</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="8">Aucun produit disponible</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_produit_new') }}">Ajouter Produit</a>
+{% endblock %}

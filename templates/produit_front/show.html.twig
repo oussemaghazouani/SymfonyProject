@@ -1,0 +1,180 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Produit{% endblock %}
+
+{% block table %}
+    <section class="product-details-section py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6">
+                    <!-- Product Image -->
+                    <div class="product-image">
+                        {% if produit.image %}
+                            <img src="{{ asset('uploads/images/' ~ produit.image) }}" alt="Image produit" class="img-fluid rounded">
+                        {% else %}
+                            <span class="text-muted">No image available</span>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <!-- Product Information -->
+                    <div class="product-info">
+                        <h1 class="mb-4">{{ produit.nom }}</h1>
+                        <p><strong>Price:</strong> {{ produit.prix }} DT</p>
+                        <p><strong>Description:</strong> {{ produit.Description }}</p>
+                        <p><strong>Availability:</strong> {{ produit.EstDisponible ? 'In Stock' : 'Out of Stock' }}</p>
+                    </div>
+
+                    <!-- Comment Section -->
+                    <div class="comments-section">
+                        <h3>Commentaires:</h3>
+                        {% if comments is empty %}
+                            <p>Aucun commentaire pour ce produit.</p>
+                        {% else %}
+                            <ul>
+                                {% for comment in comments %}
+                                    <li class="comment-bubble">
+                                        <div class="comment-content">
+                                            <strong>Commentaire:</strong> {{ comment.content }} <br>
+                                            <small>Posté le: {{ comment.createdAt|date('d/m/Y H:i') }}</small>
+                                        </div>
+
+                                        <!-- Delete Button -->
+                                        <form action="{{ path('app_produit_front_show', {'id': produit.id}) }}" method="POST" style="display:inline;">
+                                            <input type="hidden" name="delete_comment_id" value="{{ comment.id }}">
+                                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce commentaire ?')">Supprimer</button>
+                                        </form>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+
+                    <!-- Add Comment Form -->
+                    <div class="add-comment-form">
+                        <h3>Ajouter un Commentaire</h3>
+                        {{ form_start(form) }}
+                            {{ form_row(form.content) }}
+
+                        {{ form_end(form) }}
+                    </div>
+
+                    <!-- Back to Product List Button -->
+                    <a href="{{ path('app_produit_front_index') }}" class="btn btn-secondary mt-3">Retour à la liste</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <style>
+        .product-details-section {
+            background-color: #f8f9fa;
+        }
+
+        .product-image img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        .product-info h1 {
+            font-size: 2rem;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .product-info p {
+            font-size: 1.1rem;
+            color: #555;
+        }
+
+        .comments-section h3, .add-comment-form h3 {
+            font-size: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .comments-section ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .comments-section li {
+            display: flex;
+            justify-content: flex-start;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .comment-bubble {
+            max-width: 70%;
+            background-color: #e9f7fd;
+            padding: 15px;
+            border-radius: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: relative;
+            margin-left: 10px;
+            margin-right: 10px;
+        }
+
+        .comment-bubble .comment-content {
+            font-size: 1rem;
+            color: #333;
+        }
+
+        .comment-bubble small {
+            display: block;
+            font-size: 0.8rem;
+            color: #888;
+            margin-top: 5px;
+        }
+
+        .add-comment-form .btn {
+            font-size: 1rem;
+            padding: 10px 20px;
+            text-transform: uppercase;
+        }
+
+        /* Styling the text area where the user types the comment */
+        .add-comment-form textarea {
+            width: 100%;
+            height: 150px;
+            padding: 10px;
+            font-size: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #f7f7f7;
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
+            resize: vertical;
+        }
+
+        /* Custom Button Styling */
+        .add-comment-form button {
+            width: 100%;
+            background-color: #007bff;
+            border-color: #007bff;
+            padding: 12px;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            border-radius: 8px;
+            transition: background-color 0.3s;
+        }
+
+        .add-comment-form button:hover {
+            background-color: #0056b3;
+            border-color: #004085;
+        }
+
+        /* Product Back Button */
+        .product-info .btn-secondary {
+            background-color: #6c757d;
+            border-color: #6c757d;
+        }
+
+        .product-info .btn-secondary:hover {
+            background-color: #5a6268;
+            border-color: #545b62;
+        }
+    </style>
+{% endblock %}
+

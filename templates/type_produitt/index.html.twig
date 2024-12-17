@@ -1,0 +1,34 @@
+{% extends 'basedash.html.twig' %}
+
+
+{% block title %}TypeProduit index{% endblock %}
+
+{% block tablle %}
+    <h1>TypeProduit</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for type_produit in type_produits %}
+            <tr>
+                <td>{{ type_produit.Nom }}</td>
+                <td>
+                    <a href="{{ path('app_type_produitt_show', {'id': type_produit.id}) }}">Afficher</a>
+                    <a href="{{ path('app_type_produitt_edit', {'id': type_produit.id}) }}">Modifier</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_type_produitt_new') }}">Ajouter un type de produit </a>
+{% endblock %}

@@ -1,0 +1,94 @@
+
+{% extends 'base.html.twig' %}
+
+
+
+{% block type %}
+    <li class="menu-has-children">
+        <a href="#">Type de Produit</a>
+        <ul>
+            {% for type_produit in typeProduits %}
+                <li>
+                    <a href="{{ path('app_produit_front_index', { typeProduit: type_produit.id }) }}">{{ type_produit.Nom }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </li>
+{% endblock %}
+
+{% block table %}
+<section class="top-course-area section-gap" id="produits">
+    <div class="container">
+        <div class="row d-flex justify-content-center">
+            <div class="menu-content pb-70 col-lg-9">
+                <div class="title text-center">
+                    <h1 class="mb-10">Liste des Produits</h1>
+                    <p>Découvrez les produits disponibles dans notre salle de sport.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filter Section (Dropdown + Price Range) -->
+        <div class="row justify-content-center mb-4">
+            <div class="col-md-6">
+                <form method="get" action="{{ path('app_produit_front_index') }}">
+                    <div class="dropdown">
+                        <label for="typeProduit" class="form-label">Sélectionner un Type de Produit</label>
+                        <select name="typeProduit" id="typeProduit" class="form-control w-100">
+                            <option value="">-- Sélectionner --</option>
+                            {% for type_produit in typeProduits %}
+                                <option value="{{ type_produit.id }}" {% if app.request.query.get('typeProduit') == type_produit.id %}selected{% endif %}>
+                                    {{ type_produit.Nom }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <!-- Price Range Fields -->
+                    <div class="mt-3">
+                        <label for="minPrice" class="form-label">Prix Min</label>
+                        <input type="number" name="minPrice" id="minPrice" class="form-control" placeholder="Prix Min"
+                               value="{{ app.request.query.get('minPrice') }}">
+                    </div>
+                    <div class="mt-3">
+                        <label for="maxPrice" class="form-label">Prix Max</label>
+                        <input type="number" name="maxPrice" id="maxPrice" class="form-control" placeholder="Prix Max"
+                               value="{{ app.request.query.get('maxPrice') }}">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100 mt-3">Filtrer</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Product listing section -->
+        <div class="row">
+            {% for produit in produits %}
+    <div class="col-lg-4 col-md-6">
+        <div class="single-course">
+            <div class="thumb">
+                <img src="{{ asset('uploads/images/' ~ produit.image) }}" alt="Image de {{ produit.nom }}" width="100">
+            </div>
+            <span class="course-status">
+                {{ produit.EstDisponible ? 'Disponible' : 'Indisponible' }}
+            </span>
+            <a href="{{ path('app_produit_front_show', { id: produit.id }) }}">
+                <h4>{{ produit.nom }} <span>{{ produit.prix }} DT</span></h4>
+            </a>
+            <p>{{ produit.Description }}</p>
+            <p><strong>Type :</strong> {{ produit.TypeP.nom }}</p>
+            <a href="{{ path('cart_add', {id: produit.id}) }}" class="btn btn-primary mt-3">Ajouter au Panier</a>
+
+
+
+        </div>
+    </div>
+            {% else %}
+                <div class="col-12 text-center">
+                    <p class="alert alert-warning">Aucun produit disponible pour le moment.</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,11 @@
+{% extends 'basedash.html.twig' %}
+
+{% block title %}New TypeProduit{% endblock %}
+
+{% block tablle %}
+    <h1>Create new TypeProduit</h1>
+
+    {{ include('type_produitt/_form.html.twig') }}
+
+    <a href="{{ path('app_type_produitt_index') }}">back to list</a>
+{% endblock %}

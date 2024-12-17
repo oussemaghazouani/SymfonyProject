@@ -1,0 +1,13 @@
+{% extends 'basedash.html.twig' %}
+
+{% block title %}Edit TypeProduit{% endblock %}
+
+{% block tablle %}
+    <h1>Edit TypeProduit</h1>
+
+    {{ include('type_produitt/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_type_produitt_index') }}">back to list</a>
+
+    {{ include('type_produitt/_delete_form.html.twig') }}
+{% endblock %}

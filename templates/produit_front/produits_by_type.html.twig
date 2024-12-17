@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block table %}
+<h1>Produits du type: {{ typeProduit.nom }}</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nom</th>
+            <th>Prix(dt)</th>
+            <th>EstDisponible</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for produit in produits %}
+            <tr>
+                <td>{{ produit.nom }}</td>
+                <td>{{ produit.prix }}</td>
+                <td>{{ produit.EstDisponible ? 'oui' : 'non' }}</td>
+                <td>{{ produit.Description }}</td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">Aucun produit trouvé pour ce type.</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<a href="{{ path('app_produit_front_index') }}">Retour à la liste complète</a>
+{% endblock %}
