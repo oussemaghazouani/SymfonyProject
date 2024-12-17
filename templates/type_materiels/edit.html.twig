@@ -1,0 +1,14 @@
+{% extends 'basedash.html.twig' %}
+
+
+{% block title %}Edit TypeMateriels{% endblock %}
+
+{% block body %}
+    <h1>Edit TypeMateriels</h1>
+
+    {{ include('type_materiels/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_type_materiels_index') }}">back to list</a>
+
+    {{ include('type_materiels/_delete_form.html.twig') }}
+{% endblock %}

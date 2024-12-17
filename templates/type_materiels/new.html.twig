@@ -1,0 +1,11 @@
+{% extends 'basedash.html.twig' %}
+
+{% block title %}New TypeMateriels{% endblock %}
+
+{% block body %}
+    <h1>Create new TypeMateriels</h1>
+
+    {{ include('type_materiels/_form.html.twig') }}
+
+    <a href="{{ path('app_type_materiels_index') }}">back to list</a>
+{% endblock %}

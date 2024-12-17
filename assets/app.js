@@ -8,8 +8,6 @@ import './bootstrap.js';
 import './styles/app.css';
 
 console.log('This log comes from assets/app.js - welcome to AssetMapper! 🎉');
-<<<<<<< HEAD
-=======
 // assets/app.js
 import { Calendar } from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
@@ -25,4 +23,3 @@ document.addEventListener('DOMContentLoaded', function () {
     calendar.render();
 });
 
->>>>>>> competition

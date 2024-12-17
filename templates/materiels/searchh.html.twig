@@ -1,0 +1,90 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <style>
+        /* Assurer que le corps de la page occupe toute la hauteur de l'écran */
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Le bloc main prendra toute la hauteur restante */
+        main {
+            flex-grow: 1;
+        }
+
+        /* Style pour le tableau pour ajouter de l'espace autour et ajuster la hauteur */
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+            background-color: white;
+        }
+
+        table th, table td {
+            padding: 10px;
+            text-align: left;
+            color: black;  /* Change la couleur du texte à noir */
+        }
+
+        table th {
+            background-color: #f2f2f2;  /* Couleur de fond du header */
+            color: black;  /* Texte noir pour les titres */
+        }
+
+        table tr:nth-child(even) {
+            background-color: #f9f9f9;  /* Fond des lignes paires */
+        }
+
+        table tr:nth-child(odd) {
+            background-color: #f1f1f1;  /* Fond des lignes impaires */
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;  /* Bordures claires pour la table */
+        }
+
+        /* Ajuster la hauteur du tableau */
+        table {
+            height: 300px; /* Réduit la hauteur du tableau */
+            overflow-y: auto; /* Si la table dépasse, une barre de défilement sera affichée */
+        }
+    </style>
+
+    {% if searchTerm is defined and searchTerm != '' %}
+        <h2 style="color: red; text-align: center;">Résultats pour "{{ searchTerm }}"</h2>
+    {% endif %}
+
+    <table>
+        <thead>
+            <tr style="background-color: red; color: white; text-align: center;">
+                <th style="padding: 10px; text-align: center;">Nom</th>
+                <th style="padding: 10px; text-align: center;">Type</th> <!-- Colonne Type avant ID -->
+                <th style="padding: 10px; text-align: center;">ID</th> <!-- Colonne ID après Type -->
+            </tr>
+        </thead>
+        <tbody>
+            {% if materiels is not empty %}
+                {% for materiel in materiels %}
+                    <tr style="border-bottom: 1px solid red;">
+                        <td style="padding: 10px; text-align: center;">{{ materiel.name }}</td>
+                        <td style="padding: 10px; text-align: center;">
+                            {{ materiel.type ? materiel.type.name : 'Aucun type' }}
+                        </td>
+                        <td style="padding: 10px; text-align: center;">{{ materiel.id }}</td>
+                    </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="3" style="text-align: center; padding: 10px; color: black;">
+                        Aucun matériel trouvé pour "{{ searchTerm }}"
+                    </td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+
+    <!-- Ajouter un espace supplémentaire en bas -->
+    <div style="height: 300px;"></div>
+{% endblock %}
