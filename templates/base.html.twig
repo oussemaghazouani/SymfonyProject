@@ -65,6 +65,12 @@
                     <a class="tel" href="tel:+880 123 12 658 439">+880 123 12 658 439</a>
                     <a href="tel:+880 123 12 658 439"><span class="lnr lnr-phone-handset"></span></a>
                 </div>
+            <div>
+                <a href="{{ path('logout') }}" class="btn btn-logout">
+                    <span class="lnr lnr-exit"> Logout</span>
+                </a>
+            </div>
+
             </div>
         </div>
         <hr>
@@ -73,17 +79,10 @@
                 <nav id="nav-menu-container">
                     <ul class="nav-menu">
                         <li class="menu-active"><a href="#home">Home</a></li>
-                        <li><a href="#offer">We offer</a></li>
                         <li><a href="{{ path('app_produit_front_index') }}">Produit</a></li>
-                        <li><a href="#schedule">Schedule</a></li>
-                        <li><a href="#trainer">Trainer</a></li>
-                        <li><a href="#plan">Plan</a></li>
-                        <li class="menu-has-children"><a href="">Pages</a>
-                            <ul>
-                                <li><a href="generic.html">Generic</a></li>
-                                <li><a href="elements.html">Elements</a></li>
-                            </ul>
-                        </li>
+                        <li><a href="{{ path('app_competitions_index2') }}">Competition</a></li>
+                        <li><a href="{{ path('app_materiels_indexx') }}">Materiel</a></li>
+                        
                     </ul>
                 </nav><!-- #nav-menu-container -->
             </div>
@@ -95,6 +94,9 @@
     {% endblock %}
 
     {% block body %}
+    <!-- Content goes here -->
+    {% endblock %}
+	{% block table %}
     <!-- Content goes here -->
     {% endblock %}
 

@@ -23,8 +23,11 @@ use App\Entity\InvolvedEvents;
 final class CompetitionsController extends AbstractController
 {
     #[Route(name: 'app_competitions_index')]
-public function index(CompetitionsRepository $competitionsRepository): Response
+public function index(CompetitionsRepository $competitionsRepository,Request $request): Response
 {
+    $role = $request->getSession()->get('role');
+    if($role == "ROLE_ADMIN")
+    {
     $competitions = $competitionsRepository->findAll();
     $monthPercentages = $this->month($competitions);
     $percentages = $this->calculatePercentages($competitions);
@@ -36,12 +39,17 @@ public function index(CompetitionsRepository $competitionsRepository): Response
         'month'=> $monthPercentages  ,
         'percentagesmornm'=>$percentagesmornm ,
     ]);
+    }
+    return $this->redirectToRoute('app_produit_front_index');
 }
 
 
 #[Route('/new', name: 'app_competitions_new')]
 public function new(Request $request, ManagerRegistry $doctrine): Response
 {
+    $role = $request->getSession()->get('role');
+    if($role == "ROLE_ADMIN")
+    {
     $competition = new Competitions();
     $form = $this->createForm(Competitions1Type::class, $competition);
     $form->handleRequest($request);
@@ -58,6 +66,8 @@ public function new(Request $request, ManagerRegistry $doctrine): Response
         
         
     ]);
+    }
+    return $this->redirectToRoute('app_produit_front_index');
 }
 
     #[Route('/{id}', name: 'app_competitions_show')]

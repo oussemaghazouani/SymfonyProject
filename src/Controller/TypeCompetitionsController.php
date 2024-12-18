@@ -15,16 +15,25 @@ use Symfony\Component\Routing\Attribute\Route;
 final class TypeCompetitionsController extends AbstractController
 {
     #[Route(name: 'app_type_competitions_index')]
-    public function index(TypeCompetitionsRepository $typeCompetitionsRepository): Response
+    public function index(TypeCompetitionsRepository $typeCompetitionsRepository,Request $request): Response
     {
+        $role = $request->getSession()->get('role');
+        if($role == "ROLE_ADMIN")
+        {
         return $this->render('type_competitions/index.html.twig', [
             'type_competitions' => $typeCompetitionsRepository->findAll(),
         ]);
     }
 
+    return $this->redirectToRoute('app_produit_front_index');
+    }
+
     #[Route('/new', name: 'app_type_competitions_new')]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
+        $role = $request->getSession()->get('role');
+        if($role == "ROLE_ADMIN")
+        {
         $typeCompetition = new TypeCompetitions();
         $form = $this->createForm(TypeCompetitionsType::class, $typeCompetition);
         $form->handleRequest($request);
@@ -40,7 +49,11 @@ final class TypeCompetitionsController extends AbstractController
             'type_competition' => $typeCompetition,
             'form' => $form,
         ]);
+    
+    
     }
+    return $this->redirectToRoute('app_produit_front_index');
+}
 
     #[Route('/{id}', name: 'app_type_competitions_show')]
     public function show(TypeCompetitions $typeCompetition): Response

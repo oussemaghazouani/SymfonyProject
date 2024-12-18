@@ -14,17 +14,31 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/type/materiels')]
 final class TypeMaterielsController extends AbstractController
 {
+    
     #[Route(name: 'app_type_materiels_index', methods: ['GET'])]
-    public function index(TypeMaterielsRepository $typeMaterielsRepository): Response
+    public function index(TypeMaterielsRepository $typeMaterielsRepository,Request $request): Response
     {
-        return $this->render('type_materiels/index.html.twig', [
-            'type_materiels' => $typeMaterielsRepository->findAll(),
-        ]);
+
+        $role = $request->getSession()->get('role');
+        if($role == "ROLE_ADMIN")
+        
+        {
+            return $this->render('type_materiels/index.html.twig', [
+                'type_materiels' => $typeMaterielsRepository->findAll(),
+            ]);
+
+        }
+        return $this->redirectToRoute('app_produit_front_index');
     }
+        
+    
 
     #[Route('/new', name: 'app_type_materiels_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
+        $role = $request->getSession()->get('role');
+        if($role == "ROLE_ADMIN")
+        {
         $typeMateriel = new TypeMateriels();
         $form = $this->createForm(TypeMaterielsType::class, $typeMateriel);
         $form->handleRequest($request);
@@ -40,6 +54,10 @@ final class TypeMaterielsController extends AbstractController
             'type_materiel' => $typeMateriel,
             'form' => $form,
         ]);
+    }
+
+    return $this->redirectToRoute('app_produit_front_index');
+    
     }
 
     #[Route('/{id}', name: 'app_type_materiels_show', methods: ['GET'])]

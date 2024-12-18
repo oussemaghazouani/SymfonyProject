@@ -18,7 +18,7 @@ class AuthYsfController extends AbstractController
         $this->entityManager = $entityManager;
     }
 
-    #[Route('/auth_ysf', name: 'auth_ysf')]
+    #[Route('/login', name: 'auth_ysf')]
     public function index(): Response
     {
         return $this->render('auth_ysf/index.html.twig');
@@ -29,8 +29,6 @@ class AuthYsfController extends AbstractController
     {
         $email = $request->request->get('email');
         $password = $request->request->get('motdepasse');
-
-        // Validate credentials logic
         if ($this->entityManager->getRepository(User::class)->findOneBy(['email' => $email, 'motdepasse' => $password])) {
             
             $userFound = $this->entityManager->getRepository(User::class)->findOneBy(['email' => $email, 'motdepasse' => $password]);
@@ -39,21 +37,27 @@ class AuthYsfController extends AbstractController
                 // Simulate the token creation and storage
                 $payload = [
                     'id' => $userFound->getId(),
-                    'exp' => time() + (5 * 24 * 60 * 60), // 5 days expiration
+                    'username' => $userFound->getNom(),
+                    'role' =>$userFound->getRole(),
+                    'exp' => time() + (5 * 24 * 60 * 60), 
                 ];
                 $token = JWT::encode($payload, 'YSF', 'HS256');
                 $this->storeTokenInSession($request, $token);
-                $role = $userFound->getRole();
+                $request->getSession()->set('username', $userFound->getNom());
+                $request->getSession()->set('role', $userFound->getRole());
 
+
+                $role = $userFound->getRole();
+                
                 echo $role;
                 if($role == "ROLE_ADMIN")
                 {
-                    return $this->redirectToRoute('app_signup');
+                    return $this->redirectToRoute('app_user_index');
 
                 }
                 else
                 {
-                    return $this->redirectToRoute('app_user_new');
+                    return $this->redirectToRoute('app_produit_front_index');
 
                 }
             } else {
@@ -62,7 +66,22 @@ class AuthYsfController extends AbstractController
         } else {
             return $this->redirectToRoute('authenticate', ['error' => 'Password or Email is incorrect!']);
         }
+
     }
+    #[Route('/logout', name: 'logout')]
+public function logout(Request $request): Response
+{
+    // Manually invalidate the session
+    $request->getSession()->invalidate();
+    
+    // Optionally remove specific session data
+    $request->getSession()->remove('username');
+    $request->getSession()->remove('token');
+    
+    // Redirect the user to the login page or a public page
+    return $this->redirectToRoute('login');  // Or any other page
+}
+
 
     // You may need a method to verify the credentials (example)
  

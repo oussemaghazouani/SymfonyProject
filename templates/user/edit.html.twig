@@ -1,17 +1,16 @@
 {% extends 'basedash.html.twig' %}
 
-{% block title %}Create New User{% endblock %}
+{% block title %}Edit User{% endblock %}
 
 {% block body %}
 <div class="container mt-5">
-    <h2 class="mb-4 text-center text-uppercase text-secondary">Create New User</h2>
+    <h2 class="mb-4 text-center text-uppercase text-secondary">Edit User</h2>
 
     <div class="card shadow-lg border-0">
         <div class="card-header bg-primary text-white">
-            <h5 class="mb-0">User Form</h5>
+            <h5 class="mb-0">Edit User Form</h5>
         </div>
         <div class="card-body p-4">
-        
 
             {{ form_start(form) }}
                 <table class="table table-bordered">
@@ -40,13 +39,11 @@
                                 {{ form_widget(form.role, { 'attr': { 'class': 'form-control' } }) }}
                                 {{ form_errors(form.role) }}
                             </td>
-                            <input type="hidden" name="recaptcha_token" id="recaptchaToken">
-                            <button type="submit">Submit</button>
                         </tr>
                     </tbody>
                 </table>
                 <div class="text-end mt-3">
-                    <button type="submit" class="btn btn-success px-4">Save</button>
+                    <button type="submit" class="btn btn-success px-4">Update</button>
                 </div>
             {{ form_end(form) }}
         </div>

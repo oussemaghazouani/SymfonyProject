@@ -58,7 +58,7 @@ final class UserController extends AbstractController
             $entityManager->flush();
             
             $this->addFlash('success', 'Your account has been created successfully!');
-            return $this->redirectToRoute('app_login');
+            return $this->redirectToRoute('auth_ysf');
         }
         
         return $this->render('user/signup.html.twig', [
@@ -69,35 +69,55 @@ final class UserController extends AbstractController
     
 
     #[Route(name: 'app_user_index', methods: ['GET'])]
-    public function index(UserRepository $userRepository): Response
+    public function index(UserRepository $userRepository,Request $request): Response
     {
+        $role = $request->getSession()->get('role');
+        if($role == "ROLE_ADMIN")
+        {
+        $username = $request->getSession()->get('username');
+
         return $this->render('user/index.html.twig', [
+            "username" =>$username,
             'users' => $userRepository->findAll(),
         ]);
+        }
+        else         
+        return $this->redirectToRoute('app_produit_front_index');
     }
 
     #[Route('/new', name: 'app_user_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
-        $isAdmin = true;
-        $user = new User();
-
-        $form = $this->createForm(UserType::class, $user, [
-            'is_admin' => $isAdmin,
-        ]);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($user);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
+        $role = $request->getSession()->get('role');
+        if($role == "ROLE_ADMIN")
+        {
+            $username = $request->getSession()->get('username');
+            dump($username); // Displays the username
+            dump($role);     // Displays the role
+                $isAdmin = true;
+                $user = new User();
+        
+                $form = $this->createForm(UserType::class, $user, [
+                    'is_admin' => $isAdmin,
+                ]);
+                $form->handleRequest($request);
+        
+                if ($form->isSubmitted() && $form->isValid()) {
+                    $entityManager->persist($user);
+                    $entityManager->flush();
+        
+                    return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
+                }
+        
+                return $this->render('user/new.html.twig', [
+                    'user' => $user,
+                    'form' => $form->createView(),
+                ]);
         }
+        else         
+        return $this->redirectToRoute('app_produit_front_index');
 
-        return $this->render('user/new.html.twig', [
-            'user' => $user,
-            'form' => $form->createView(),
-        ]);
+       
     }
 
     #[Route('/{email}', name: 'app_user_show', methods: ['GET'])]

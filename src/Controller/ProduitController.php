@@ -17,16 +17,24 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 final class ProduitController extends AbstractController
 {
     #[Route(name: 'app_produit_index', methods: ['GET'])]
-    public function index(ProduitRepository $produitRepository): Response
+    public function index(ProduitRepository $produitRepository,Request $request): Response
     {
+        $role = $request->getSession()->get('role');
+        if($role == "ROLE_ADMIN")
+        {
         return $this->render('produit/index.html.twig', [
             'produits' => $produitRepository->findAll(),
         ]);
+    }
+    return $this->redirectToRoute('app_produit_front_index');
     }
 
     #[Route('/new', name: 'app_produit_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
 {
+    $role = $request->getSession()->get('role');
+    if($role == "ROLE_ADMIN")
+    {
     $produit = new Produit();
     $form = $this->createForm(ProduitType::class, $produit);
     $form->handleRequest($request);
@@ -58,6 +66,8 @@ final class ProduitController extends AbstractController
         'produit' => $produit,
         'form' => $form->createView(),
     ]);
+    }
+    return $this->redirectToRoute('app_produit_front_index');
 }
 
     #[Route('/{id}', name: 'app_produit_show', methods: ['GET'])]

@@ -1,20 +1,109 @@
 {% block body %}
-<h1>Signup</h1>
+    <style>
+        /* Style général de la page */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
 
-{# Optionally display the site key for debugging purposes #}
-<p>reCAPTCHA Site Key: {{ site_key }}</p>
+        .form-container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+        }
 
-{{ form_start(form) }}
- 
-    {# Add a field to render the reCAPTCHA widget for v2 #}
-    <div class="g-recaptcha" data-sitekey="{{ site_key }}"></div>
+        h1 {
+            text-align: center;
+            color: #333;
+        }
 
-    {{ form_row(form._token) }}
-     
-    <button type="submit">Sign up</button>
+        .form-group {
+            margin-bottom: 20px;
+        }
 
-{{ form_end(form) }}
+        label {
+            font-weight: bold;
+            margin-bottom: 8px;
+            display: block;
+            color: #555;
+        }
 
-{# Load the reCAPTCHA API JS to render the reCAPTCHA v2 widget #}
-<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+        input[type="text"], input[type="email"], input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-top: 5px;
+            box-sizing: border-box;
+        }
+
+        button[type="submit"] {
+            width: 100%;
+            padding: 12px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        .g-recaptcha {
+            margin-top: 15px;
+            margin-bottom: 15px;
+        }
+
+        .recaptcha-label {
+            font-size: 14px;
+            text-align: center;
+            margin-top: 10px;
+        }
+    </style>
+
+    <div class="form-container">
+        <h1>Signup</h1>
+
+        {# Optionally display the reCAPTCHA site key for debugging purposes #}
+
+        {{ form_start(form) }}
+        
+            <div class="form-group">
+                {{ form_row(form.nom) }}
+            </div>
+
+            <div class="form-group">
+                {{ form_row(form.EMAIL) }}
+            </div>
+
+            <div class="form-group">
+                {{ form_row(form.motdepasse) }}
+            </div>
+
+            {# reCAPTCHA v2 widget #}
+            <div class="form-group">
+                <div class="g-recaptcha" data-sitekey="{{ site_key }}"></div>
+            </div>
+
+            {{ form_row(form._token) }}
+
+            <button type="submit">Sign up</button>
+        {{ form_end(form) }}
+
+        {# Load the reCAPTCHA API JS to render the reCAPTCHA v2 widget #}
+        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    </div>
 {% endblock %}

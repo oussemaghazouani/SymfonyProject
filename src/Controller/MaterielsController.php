@@ -17,18 +17,27 @@ use App\Repository\TypeMaterielsRepository;
 #[Route('/materiels')]
 final class MaterielsController extends AbstractController
 {
+
     #[Route(name: 'app_materiels_index', methods: ['GET'])]
-    public function index(MaterielsRepository $materielsRepository): Response
+    public function index(MaterielsRepository $materielsRepository,Request $request): Response
     {
+        $role = $request->getSession()->get('role');
+        if($role == "ROLE_ADMIN")
+        {
         return $this->render('materiels/index.html.twig', [
             
             'materiels' => $materielsRepository->findAll(),
         ]);
+        }
+        return $this->redirectToRoute('app_produit_front_index');
     }
 
     #[Route('/new', name: 'app_materiels_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
+        $role = $request->getSession()->get('role');
+        if($role == "ROLE_ADMIN")
+        {
         $materiel = new Materiels();
         $form = $this->createForm(MaterielsType::class, $materiel);
         $form->handleRequest($request);
@@ -44,6 +53,8 @@ final class MaterielsController extends AbstractController
             'materiel' => $materiel,
             'form' => $form,
         ]);
+        }
+        return $this->redirectToRoute('app_produit_front_index');
     }
 
     #[Route('/{id}', name: 'app_materiels_show', methods: ['GET'])]
