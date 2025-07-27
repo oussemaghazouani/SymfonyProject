@@ -1,0 +1,244 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Tableau de bord Client - SaaS Client{% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <nav class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+            <div class="position-sticky pt-3">
+                <div class="text-center mb-4">
+                    <img src="https://via.placeholder.com/80" class="rounded-circle" alt="Avatar">
+                    <h5 class="mt-2">{{ user.prenom }} {{ user.nom }}</h5>
+                    <p class="text-muted">{{ user.email }}</p>
+                </div>
+                
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">
+                            <i class="fas fa-tachometer-alt me-2"></i>
+                            Tableau de bord
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-search me-2"></i>
+                            Rechercher des services
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-clipboard-list me-2"></i>
+                            Mes commandes
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-user-cog me-2"></i>
+                            Profil
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('auth_logout') }}">
+                            <i class="fas fa-sign-out-alt me-2"></i>
+                            Déconnexion
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Main content -->
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2">
+                    <i class="fas fa-home me-2"></i>
+                    Tableau de bord Client
+                </h1>
+                <div class="btn-toolbar mb-2 mb-md-0">
+                    <div class="btn-group me-2">
+                        <button type="button" class="btn btn-sm btn-outline-secondary">
+                            <i class="fas fa-download me-1"></i>
+                            Exporter
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Welcome message -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="alert alert-primary" role="alert">
+                        <h4 class="alert-heading">
+                            <i class="fas fa-hands me-2"></i>
+                            Bienvenue {{ user.prenom }} !
+                        </h4>
+                        <p>Vous êtes connecté en tant que <strong>Client</strong>. Découvrez notre plateforme et trouvez les meilleurs prestataires pour vos projets.</p>
+                        <hr>
+                        <p class="mb-0">
+                            <i class="fas fa-info-circle me-2"></i>
+                            Votre compte a été vérifié le {{ user.createdAt|date('d/m/Y à H:i') }}.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats cards -->
+            <div class="row mb-4">
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="card border-left-primary shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                        Projets actifs
+                                    </div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">0</div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-project-diagram fa-2x text-gray-300"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="card border-left-success shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                        Commandes terminées
+                                    </div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">0</div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-check-circle fa-2x text-gray-300"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="card border-left-info shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                        Prestataires favoris
+                                    </div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">0</div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-heart fa-2x text-gray-300"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="card border-left-warning shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                        Messages non lus
+                                    </div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">0</div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-envelope fa-2x text-gray-300"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent activity -->
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">
+                                <i class="fas fa-clock me-2"></i>
+                                Activité récente
+                            </h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="text-center text-muted py-4">
+                                <i class="fas fa-inbox fa-3x mb-3"></i>
+                                <p>Aucune activité récente</p>
+                                <a href="#" class="btn btn-primary">
+                                    <i class="fas fa-plus me-2"></i>
+                                    Créer un nouveau projet
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">
+                                <i class="fas fa-user-check me-2"></i>
+                                Informations du compte
+                            </h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <strong>Type:</strong> 
+                                <span class="badge bg-primary">{{ user.userType|title }}</span>
+                            </div>
+                            {% if user.nomEntreprise %}
+                                <div class="mb-3">
+                                    <strong>Entreprise:</strong> {{ user.nomEntreprise }}
+                                </div>
+                            {% endif %}
+                            <div class="mb-3">
+                                <strong>Membre depuis:</strong> {{ user.createdAt|date('d/m/Y') }}
+                            </div>
+                            <div class="mb-3">
+                                <strong>Statut email:</strong> 
+                                <span class="badge bg-success">
+                                    <i class="fas fa-check me-1"></i>Vérifié
+                                </span>
+                            </div>
+                            {% if user.telephone %}
+                                <div class="mb-3">
+                                    <strong>Téléphone:</strong> 
+                                    {% if user.phoneVerified %}
+                                        <span class="text-success">{{ user.telephone }} ✓</span>
+                                    {% else %}
+                                        <span class="text-warning">{{ user.telephone }} (non vérifié)</span>
+                                    {% endif %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<style>
+.border-left-primary {
+    border-left: 0.25rem solid #4e73df !important;
+}
+.border-left-success {
+    border-left: 0.25rem solid #1cc88a !important;
+}
+.border-left-info {
+    border-left: 0.25rem solid #36b9cc !important;
+}
+.border-left-warning {
+    border-left: 0.25rem solid #f6c23e !important;
+}
+</style>
+{% endblock %}

@@ -1,0 +1,127 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Vérification Téléphone - SaaS Client{% endblock %}
+
+{% block body %}
+<div class="container-fluid min-vh-100 d-flex align-items-center justify-content-center bg-light">
+    <div class="row w-100 justify-content-center">
+        <div class="col-12 col-md-6 col-lg-4">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-success text-white text-center py-4">
+                    <h1 class="h3 mb-0">
+                        <i class="fas fa-mobile-alt me-2"></i>
+                        Vérification Téléphone
+                    </h1>
+                    {% if step == 'phone' %}
+                        <p class="mb-0 text-light">Saisissez votre numéro</p>
+                    {% else %}
+                        <p class="mb-0 text-light">Code de confirmation</p>
+                    {% endif %}
+                </div>
+                
+                <div class="card-body p-4">
+                    {% for message in app.flashes('success') %}
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <i class="fas fa-check-circle me-2"></i>{{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    {% endfor %}
+                    
+                    {% for message in app.flashes('error') %}
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <i class="fas fa-exclamation-circle me-2"></i>{{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    {% endfor %}
+
+                    {% if step == 'phone' %}
+                        <div class="text-center mb-4">
+                            <i class="fas fa-mobile-alt fa-3x text-success mb-3"></i>
+                            <p class="text-muted">
+                                Pour finaliser votre connexion, veuillez confirmer votre numéro de téléphone.
+                            </p>
+                        </div>
+
+                        {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+                        
+                        <div class="mb-4">
+                            <label for="{{ form.telephone.vars.id }}" class="form-label fw-bold">
+                                <i class="fas fa-phone me-1"></i>{{ form.telephone.vars.label }}
+                            </label>
+                            {{ form_widget(form.telephone, {'attr': {'class': 'form-control form-control-lg'}}) }}
+                            <div class="form-text">Format: +33 1 23 45 67 89 ou 01 23 45 67 89</div>
+                            {{ form_errors(form.telephone) }}
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-success btn-lg">
+                                <i class="fas fa-paper-plane me-2"></i>
+                                Envoyer le code
+                            </button>
+                        </div>
+
+                        {{ form_end(form) }}
+
+                    {% else %}
+                        <div class="text-center mb-4">
+                            <i class="fas fa-sms fa-3x text-success mb-3"></i>
+                            <p class="text-muted">
+                                Un code de vérification a été envoyé au :
+                            </p>
+                            <p class="fw-bold text-success">{{ phone }}</p>
+                        </div>
+
+                        {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+                        
+                        <div class="mb-4">
+                            <label for="{{ form.code.vars.id }}" class="form-label fw-bold text-center d-block">
+                                <i class="fas fa-key me-1"></i>{{ form.code.vars.label }}
+                            </label>
+                            {{ form_widget(form.code, {'attr': {'class': 'form-control form-control-lg text-center', 'style': 'font-size: 1.5rem; letter-spacing: 0.5rem;'}}) }}
+                            {{ form_errors(form.code) }}
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-success btn-lg">
+                                <i class="fas fa-check me-2"></i>
+                                Vérifier et se connecter
+                            </button>
+                        </div>
+
+                        {{ form_end(form) }}
+
+                        <div class="text-center mt-3">
+                            <a href="{{ path('auth_verify_phone', {'step': 'phone'}) }}" class="btn btn-link">
+                                <i class="fas fa-edit me-2"></i>
+                                Modifier le numéro
+                            </a>
+                        </div>
+                    {% endif %}
+
+                    <hr class="my-4">
+                    
+                    <div class="text-center">
+                        <a href="{{ path('auth_login') }}" class="btn btn-link">
+                            <i class="fas fa-arrow-left me-2"></i>
+                            Retour à la connexion
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if step == 'code' %}
+<script>
+// Auto-format the verification code input
+document.getElementById('{{ form.code.vars.id }}').addEventListener('input', function(e) {
+    let value = e.target.value.replace(/\D/g, '');
+    if (value.length > 6) {
+        value = value.slice(0, 6);
+    }
+    e.target.value = value;
+});
+</script>
+{% endif %}
+{% endblock %}
