@@ -15,63 +15,62 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\PasswordC
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\SecurityRequestAttributes;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
+use App\Repository\UserRepository;
 
 class UserAuthenticator extends AbstractLoginFormAuthenticator
 {
     use TargetPathTrait;
 
-    public const LOGIN_ROUTE = 'app_login'; // Route de connexion (définie dans SecurityController)
+    public const LOGIN_ROUTE = 'auth_login';
 
-    public function __construct(private UrlGeneratorInterface $urlGenerator)
-    {
+    public function __construct(
+        private UrlGeneratorInterface $urlGenerator,
+        private UserRepository $userRepository
+    ) {
     }
 
     public function authenticate(Request $request): Passport
     {
-        // Récupérer l'email à partir de la requête
-        $email = $request->request->get('email');
+        $identifiant = $request->request->get('identifiant', '');
 
-        // Vérification si l'email est vide
-        if (empty($email)) {
-            throw new \InvalidArgumentException('Email cannot be null or empty.');
+        $request->getSession()->set(SecurityRequestAttributes::LAST_USERNAME, $identifiant);
+
+        // Find user by email or identifiant
+        $user = $this->userRepository->findOneBy(['email' => $identifiant]) 
+                ?? $this->userRepository->findOneBy(['identifiant' => $identifiant]);
+
+        if (!$user) {
+            throw new \Exception('User not found');
         }
 
-        // Sauvegarder l'email dans la session (utile pour pré-remplir le champ email)
-        $request->getSession()->set(SecurityRequestAttributes::LAST_USERNAME, $email);
-
-        // Créer le Passport avec l'email et le mot de passe
         return new Passport(
-            new UserBadge($email),  // L'email comme identifiant utilisateur
-            new PasswordCredentials($request->request->get('password')),  // Le mot de passe
+            new UserBadge($user->getEmail()),
+            new PasswordCredentials($request->request->get('password', '')),
             [
-                new CsrfTokenBadge('authenticate', $request->request->get('_csrf_token')),  // Vérification CSRF
-                new RememberMeBadge(),  // Gérer "Se souvenir de moi"
+                new CsrfTokenBadge('authenticate', $request->request->get('_token')),
+                new RememberMeBadge(),
             ]
         );
     }
 
-
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
-        // Vérifier si une cible spécifique est définie
-        /*if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
+        if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
             return new RedirectResponse($targetPath);
-        }*/
-
-        // Récupérer les rôles de l'utilisateur connecté
-        $roles = $token->getRoleNames();
-
-        // Redirection basée sur les rôles
-        if (in_array('ROLE_ADMIN', $roles)) {
-            return new RedirectResponse($this->urlGenerator->generate('app_index')); // Admin -> page backoffice
-        } elseif (in_array('ROLE_USER', $roles)) {
-            return new RedirectResponse($this->urlGenerator->generate('app_front')); // Utilisateur -> page front
         }
 
-        // Par défaut, rediriger vers une page générique
-        return new RedirectResponse($this->urlGenerator->generate('app_login'));
-    }
+        $user = $token->getUser();
+        $roles = $user->getRoles();
 
+        // Redirect based on user role
+        if (in_array('ROLE_ADMIN', $roles)) {
+            return new RedirectResponse($this->urlGenerator->generate('app_user_index'));
+        } elseif (in_array('ROLE_PROVIDER', $roles)) {
+            return new RedirectResponse($this->urlGenerator->generate('provider_dashboard'));
+        } else {
+            return new RedirectResponse($this->urlGenerator->generate('client_dashboard'));
+        }
+    }
 
     protected function getLoginUrl(Request $request): string
     {

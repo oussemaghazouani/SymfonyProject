@@ -1,0 +1,186 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Inscription Client - SaaS Client{% endblock %}
+
+{% block body %}
+<div class="container-fluid min-vh-100 d-flex align-items-center justify-content-center bg-light">
+    <div class="row w-100 justify-content-center">
+        <div class="col-12 col-md-6 col-lg-5">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-primary text-white text-center py-4">
+                    <h1 class="h3 mb-0">
+                        <i class="fas fa-user-plus me-2"></i>
+                        Inscription Client
+                    </h1>
+                    <p class="mb-0 text-light">Rejoignez SaaS Client</p>
+                </div>
+                
+                <div class="card-body p-4">
+                    {% for message in app.flashes('success') %}
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <i class="fas fa-check-circle me-2"></i>{{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    {% endfor %}
+                    
+                    {% for message in app.flashes('error') %}
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <i class="fas fa-exclamation-circle me-2"></i>{{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    {% endfor %}
+
+                    {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.identifiant.vars.id }}" class="form-label fw-bold">
+                                <i class="fas fa-id-card me-1"></i>{{ form.identifiant.vars.label }}
+                            </label>
+                            {{ form_widget(form.identifiant, {'attr': {'class': 'form-control form-control-lg'}}) }}
+                            <div class="form-text">Votre identifiant unique</div>
+                            {{ form_errors(form.identifiant) }}
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.email.vars.id }}" class="form-label fw-bold">
+                                <i class="fas fa-envelope me-1"></i>{{ form.email.vars.label }}
+                            </label>
+                            {{ form_widget(form.email, {'attr': {'class': 'form-control form-control-lg'}}) }}
+                            {{ form_errors(form.email) }}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.motdepasse.first.vars.id }}" class="form-label fw-bold">
+                                <i class="fas fa-lock me-1"></i>Mot de passe
+                            </label>
+                            {{ form_widget(form.motdepasse.first, {'attr': {'class': 'form-control form-control-lg'}}) }}
+                            {{ form_errors(form.motdepasse.first) }}
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.motdepasse.second.vars.id }}" class="form-label fw-bold">
+                                <i class="fas fa-lock me-1"></i>Confirmer mot de passe
+                            </label>
+                            {{ form_widget(form.motdepasse.second, {'attr': {'class': 'form-control form-control-lg'}}) }}
+                            {{ form_errors(form.motdepasse.second) }}
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">
+                            <i class="fas fa-users me-1"></i>Type d'utilisateur
+                        </label>
+                        <div class="d-flex gap-4">
+                            {% for choice in form.userType %}
+                                <div class="form-check">
+                                    {{ form_widget(choice, {'attr': {'class': 'form-check-input', 'onchange': 'toggleCompanyField()'}}) }}
+                                    <label class="form-check-label" for="{{ choice.vars.id }}">
+                                        {{ choice.vars.label }}
+                                    </label>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        {{ form_errors(form.userType) }}
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.nom.vars.id }}" class="form-label fw-bold">
+                                <i class="fas fa-user me-1"></i>{{ form.nom.vars.label }}
+                            </label>
+                            {{ form_widget(form.nom, {'attr': {'class': 'form-control form-control-lg'}}) }}
+                            {{ form_errors(form.nom) }}
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.prenom.vars.id }}" class="form-label fw-bold">
+                                <i class="fas fa-user me-1"></i>{{ form.prenom.vars.label }}
+                            </label>
+                            {{ form_widget(form.prenom, {'attr': {'class': 'form-control form-control-lg'}}) }}
+                            {{ form_errors(form.prenom) }}
+                        </div>
+                    </div>
+
+                    <div class="mb-3" id="company-field" style="display: none;">
+                        <label for="{{ form.nomEntreprise.vars.id }}" class="form-label fw-bold">
+                            <i class="fas fa-building me-1"></i>{{ form.nomEntreprise.vars.label }}
+                        </label>
+                        {{ form_widget(form.nomEntreprise, {'attr': {'class': 'form-control form-control-lg'}}) }}
+                        {{ form_errors(form.nomEntreprise) }}
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="form-check">
+                            {{ form_widget(form.acceptTerms, {'attr': {'class': 'form-check-input'}}) }}
+                            <label class="form-check-label" for="{{ form.acceptTerms.vars.id }}">
+                                <i class="fas fa-file-contract me-1"></i>{{ form.acceptTerms.vars.label }}
+                            </label>
+                        </div>
+                        {{ form_errors(form.acceptTerms) }}
+                    </div>
+
+                    <div class="mb-4">
+                        <div class="form-check">
+                            {{ form_widget(form.acceptPrivacy, {'attr': {'class': 'form-check-input'}}) }}
+                            <label class="form-check-label" for="{{ form.acceptPrivacy.vars.id }}">
+                                <i class="fas fa-user-shield me-1"></i>{{ form.acceptPrivacy.vars.label }}
+                            </label>
+                        </div>
+                        {{ form_errors(form.acceptPrivacy) }}
+                    </div>
+
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fas fa-user-plus me-2"></i>
+                            S'inscrire
+                        </button>
+                    </div>
+
+                    {{ form_end(form) }}
+
+                    <hr class="my-4">
+                    
+                    <div class="text-center">
+                        <p class="mb-2">Déjà inscrit ?</p>
+                        <a href="{{ path('auth_login') }}" class="btn btn-outline-primary">
+                            <i class="fas fa-sign-in-alt me-2"></i>
+                            Se connecter
+                        </a>
+                    </div>
+                    
+                    <div class="text-center mt-3">
+                        <a href="{{ path('auth_provider_register') }}" class="btn btn-link">
+                            Inscription Prestataire de service
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function toggleCompanyField() {
+    const entrepriseRadio = document.querySelector('input[value="entreprise"]');
+    const companyField = document.getElementById('company-field');
+    const companyInput = document.querySelector('#{{ form.nomEntreprise.vars.id }}');
+    
+    if (entrepriseRadio && entrepriseRadio.checked) {
+        companyField.style.display = 'block';
+        companyInput.setAttribute('required', 'required');
+    } else {
+        companyField.style.display = 'none';
+        companyInput.removeAttribute('required');
+        companyInput.value = '';
+    }
+}
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', function() {
+    toggleCompanyField();
+});
+</script>
+{% endblock %}
